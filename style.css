@@ -1,0 +1,110 @@
+/* HWiNFO Dashboard for Demion's remotehwinfo by KyoudaiKen */
+
+body {
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    font-family: 'DejaVu Sans Mono', 'Bitsream Vera Sans Mono', 'Hack', monospace;
+    font-size: 12pt;
+
+    background-image: linear-gradient(#000, #081827, #382600, #220036);
+    color: #FFF;
+    overflow: hidden;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.setup {
+    font-size: 3.5em;
+    line-height: 0.75em;
+    position: absolute;
+    bottom: 0.125em;
+    right: 0.125em;
+    width: 0.9em;
+    height: 0.85em;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-image: linear-gradient(#160b47, #000);
+    color: #ffbb00;
+    opacity: 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    overflow: hidden;
+}
+
+.setup:hover {
+    opacity: 1;
+}
+
+.setup:active {
+    background-image: linear-gradient(#000, #160b47);
+}
+
+.sensor-container {
+    flex: 1;
+    display: flex;
+    overflow-y: auto;
+    max-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    font-size: 30px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: min-content;
+    -moz-min-height: min-content;
+    -webkit-min-height: min-content;
+    -ms-edge-min-height: min-content;
+    -ms-min-height: min-content;
+}
+
+.flex-item {
+    background-color: #000;
+    color: #6f00ff;
+    width: calc(100%/6);
+    height: 128px;
+    line-height: 128px;
+    margin: 0;
+    padding: 0;
+}
+
+  /* Responsive layout - makes a one column-layout instead of two-column layout */
+@media (max-width: 800px) {
+    .flex-item {
+        width: calc(100%/3);
+    }
+
+    .setup {
+        opacity: 0.5;
+    }
+}
+
+@media (max-width: 500px) {
+    .flex-item {
+        width: 50%;
+    }
+
+    .setup {
+        opacity: 0.5;
+    }
+}
