@@ -212,6 +212,7 @@ html, body {
 /* Remove default bullets */
 ul, #sensor-tree {
     list-style-type: none;
+    margin-top: 0.125em;
 }
 
 /* Remove margins and padding from the parent ul */
