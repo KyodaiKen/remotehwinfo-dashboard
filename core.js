@@ -37,6 +37,7 @@ var get_sensors = function() {
     remotehwinfo_req('GET', 'json.json')
     .then(function (data) {
         data = data.replaceAll(": inf", ": \"Infinity\"");
+        data = data.replaceAll(": \"Â°C\"", ": \"°C\"");
         data = JSON.parse(data);
         console.log(data);
 
@@ -53,7 +54,21 @@ var get_sensors = function() {
             for (let ri = 0; ri < data.hwinfo.readings.length; ri++) {
                 if(data.hwinfo.readings[ri].sensorIndex == data.hwinfo.sensors[si].entryIndex) {
                     var dom_ul_li = document.createElement("li");
-                    dom_ul_li.insertAdjacentHTML("beforeend","<div>"+data.hwinfo.readings[ri].labelUser+" | unit: "+data.hwinfo.readings[ri].unit+"</div>")
+                    var label = "";
+                    if(data.hwinfo.readings[ri].unit == "Yes/No") {
+                        var val;
+                        switch (data.hwinfo.readings[ri].value) {
+                            case 0:
+                                val = "No";
+                                break;
+                            case 1:
+                                val = "Yes";
+                        }
+                        label = "<div>"+data.hwinfo.readings[ri].labelUser+" ("+val+")</div>";
+                    } else {
+                        label = "<div>"+data.hwinfo.readings[ri].labelUser+" ("+data.hwinfo.readings[ri].value.toLocaleString('en-US')+data.hwinfo.readings[ri].unit+")</div>";
+                    }
+                    dom_ul_li.insertAdjacentHTML("beforeend",label);
                     dom_ul_top.appendChild(dom_ul_li);
                 }
                 dom_li.appendChild(dom_ul_top);

@@ -255,10 +255,10 @@ ul, #sensor-tree {
 }
 
 #sensor-tree div {
-    padding: 1em;
     background-color: #003d61;
     cursor: pointer;
-    user-select: none; /* Prevent text selection */
+    user-select: none;
+    padding: 1em;
 }
 
 /* -- RESPONSIVENESS -- */
@@ -287,6 +287,14 @@ ul, #sensor-tree {
         flex-wrap: wrap;
         height: 10em;
         font-size: 0.85em;
+    }
+
+    .single-button-toolbar {
+        height: 3em !important;
+    }
+
+    .single-button-toolbar-tree {
+        height: calc(100% - 4em) !important;
     }
 
     #setup-wnd > .layout-box > div > button {
