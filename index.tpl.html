@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HWiNFO Dashboard</title>
     <style>
         /*@@@ style.css */
@@ -15,28 +14,44 @@
     <body>
         <div class="sensor-container">
             <div class="flex-container">
-                <div class="flex-item">1</div>
-                <div class="flex-item">2</div>
-                <div class="flex-item">3</div>
-                <div class="flex-item">4</div>
-                <div class="flex-item">5</div>
-                <div class="flex-item">6</div>
-                <div class="flex-item">7</div>
-                <div class="flex-item">8</div>
-                <div class="flex-item">9</div>
-                <div class="flex-item">10</div>
-                <div class="flex-item">11</div>
-                <div class="flex-item">12</div>
-                <div class="flex-item">13</div>
-                <div class="flex-item">14</div>
-                <div class="flex-item">15</div>
-                <div class="flex-item">16</div>
-                <div class="flex-item">17</div>
-                <div class="flex-item">18</div>
-                <div class="flex-item">19</div>
-                <div class="flex-item">20</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+                <div>11</div>
+                <div>12</div>
+                <div>13</div>
+                <div>14</div>
+                <div>15</div>
+                <div>16</div>
+                <div>17</div>
+                <div>18</div>
+                <div>19</div>
+                <div>20</div>
             </div>
-            <div class="setup" onclick="test()">&#9881;</div>
+            <div id="setup-btn" onclick="open_setup_wnd()">&#9881;</div>
+            <div id="setup-wnd">
+                <div class="layout-box">
+                    <div id="setup-sensors"></div>
+                    <div id="setup-toolbar">
+                        <button class="button">Add Sensor</button>
+                        <button class="button">Edit Sensor</button>
+                        <button class="red-button">Delete Sensor</button>
+                        <hr class="sep"/>
+                        <button class="button" id="backup-restore">Backup & Restore</button>
+                        <hr class="sep"/>
+                        <button class="button">Save & Close</button>
+                        <button class="button">Preview Setup</button>
+                        <button class="red-button" onclick="close_setup_wnd()">Cancel</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

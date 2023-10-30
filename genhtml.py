@@ -16,7 +16,7 @@ while True:
             iln = incf.readline()
             if not iln:
                 break
-            out.write(' '*8 + iln)
+            out.write(' '*found + iln)
         incf.close()
     else:
         out.write(ln)

@@ -10,6 +10,7 @@ body {
 
     background-image: linear-gradient(#000, #081827, #382600, #220036);
     color: #FFF;
+    background-color: #000;
     overflow: hidden;
 }
 
@@ -23,7 +24,7 @@ html, body {
     box-sizing: border-box;
 }
 
-.setup {
+#setup-btn {
     font-size: 3.5em;
     line-height: 0.75em;
     position: absolute;
@@ -34,8 +35,8 @@ html, body {
     margin: 0;
     padding: 0;
     text-align: center;
-    background-image: linear-gradient(#160b47, #000);
-    color: #ffbb00;
+    background-color: #003d61;
+    color: #0072b4;
     opacity: 0;
     cursor: pointer;
     -webkit-user-select: none;
@@ -45,12 +46,69 @@ html, body {
     overflow: hidden;
 }
 
-.setup:hover {
+#setup-btn:hover {
     opacity: 1;
 }
 
-.setup:active {
-    background-image: linear-gradient(#000, #160b47);
+#setup-btn:active, #close-setup-btn:active {
+    background-color: #00a2ff;
+    color: #000;
+}
+
+.button {
+    font-family: 'DejaVu Sans Mono', 'Bitsream Vera Sans Mono', 'Hack', monospace;
+    font-size: 1.125em;
+    line-height: 2.3333em;
+    border: none;
+    background-color: #003d61;
+    color: #00a2ff;
+    width: 100%;
+    margin: 0.125em 0 0.125em 0;
+    padding: 0 0.5em 0 0.5em;
+    text-align: left;
+}
+
+.red-button {
+    font-family: 'DejaVu Sans Mono', 'Bitsream Vera Sans Mono', 'Hack', monospace;
+    font-size: 1.125em;
+    line-height: 2.3333em;
+    border: none;
+    background-color: #A00000;
+    color: #ff4e4e;
+    width: 100%;
+    margin: 0.125em 0 0.125em 0;
+    padding: 0 0.5em 0 0.5em;
+    text-align: left;
+}
+
+.button:hover {
+    background-color: #0072b4;
+    color: #fff;
+}
+
+.button:active {
+    background-color: #00a2ff;
+    color: #000;
+}
+
+.red-button:hover {
+    background-color: #ff0000;
+    color: #fff;
+}
+
+.red-button:active {
+    background-color: #ff4e4e;
+    color: #000;
+}
+
+.sep {
+    line-height: 1em;
+    height: 0.125em;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 0.125em solid #003d61;
+    width: 100%;
 }
 
 .sensor-container {
@@ -78,33 +136,114 @@ html, body {
     -ms-min-height: min-content;
 }
 
-.flex-item {
-    background-color: #000;
+.flex-container > div {
+    background-color: #00000040;
     color: #6f00ff;
     width: calc(100%/6);
     height: 128px;
     line-height: 128px;
     margin: 0;
     padding: 0;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+#setup-wnd {
+    visibility: hidden;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #081827;
+}
+
+#setup-wnd > .layout-box {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#setup-wnd > .layout-box > div {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin: 0.25em;
+    padding: 0;
+}
+
+#setup-sensors {
+    width: calc(100% - 15.5em);
+    background-color: #220036;
+}
+
+#setup-toolbar {
+    width: 14em;
+}
+
+#setup-wnd > .layout-box > div > button {
+    width: 100%;
 }
 
   /* Responsive layout - makes a one column-layout instead of two-column layout */
 @media (max-width: 800px) {
-    .flex-item {
+    .flex-container > div {
         width: calc(100%/3);
     }
 
-    .setup {
+    #setup-btn {
         opacity: 0.5;
+    }
+
+    #setup-wnd > .layout-box > div {
+        flex-direction: row;
+    }
+
+    #setup-sensors {
+        width: 100%;
+        height: calc(100% - 10em);
+    }
+
+    #setup-toolbar {
+        width: 100%;
+        flex-wrap: wrap;
+        height: 10em;
+        font-size: 0.85em;
+    }
+
+    #setup-wnd > .layout-box > div > button {
+        width: calc(100%/3 - 0.25em);
+        margin: 0 0.125em 0 0.125em;
+    }
+
+    #backup-restore {
+        width: 100% !important;
     }
 }
 
-@media (max-width: 500px) {
-    .flex-item {
+@media (max-width: 420px) {
+    .flex-container > div {
         width: 50%;
     }
 
-    .setup {
+    #setup-btn {
         opacity: 0.5;
+    }
+
+    #setup-toolbar {
+        font-size: 0.6em;
+    }
+
+    #setup-sensors {
+        width: 100%;
+        height: calc(100% - 7em);
     }
 }
