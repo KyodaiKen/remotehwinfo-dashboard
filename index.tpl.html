@@ -38,7 +38,8 @@
             <div id="setup-btn" onclick="open_setup_wnd()">&#9881;</div>
             <div id="setup-wnd">
                 <div class="layout-box">
-                    <div id="setup-sensors"></div>
+                    <div id="setup-sensors">
+                    </div>
                     <div id="setup-toolbar">
                         <button class="button" onclick="add_sensor_btn_click()">Add Sensor</button>
                         <button class="button">Edit Sensor</button>
@@ -49,6 +50,16 @@
                         <button class="button">Save & Close</button>
                         <button class="button">Preview Setup</button>
                         <button class="red-button" onclick="close_setup_wnd()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div id="setup-add-sensor-wnd">
+                <div class="layout-box">
+                    <div id="setup-sensors">
+                        <ul id="sensor-tree"></ul>
+                    </div>
+                    <div id="setup-toolbar">
+                        <button class="red-button" onclick="close_add_sensor_btn_click()">Cancel</button>
                     </div>
                 </div>
             </div>

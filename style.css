@@ -1,5 +1,6 @@
 /* HWiNFO Dashboard for Demion's remotehwinfo by KyoudaiKen */
 
+/* ----------------------- PANEL LAYOUT ----------------------- */
 body {
     display: block;
     position: absolute;
@@ -54,6 +55,9 @@ html, body {
     background-color: #00a2ff;
     color: #000;
 }
+
+
+/* ----------------------- SETUP WINDOW ----------------------- */
 
 .button {
     font-family: 'DejaVu Sans Mono', 'Bitsream Vera Sans Mono', 'Hack', monospace;
@@ -150,7 +154,7 @@ html, body {
     user-select: none;
 }
 
-#setup-wnd {
+#setup-wnd, #setup-add-sensor-wnd {
     visibility: hidden;
     display: flex;
     margin: 0;
@@ -163,7 +167,8 @@ html, body {
     background-color: #081827;
 }
 
-#setup-wnd > .layout-box {
+#setup-wnd > .layout-box,
+#setup-add-sensor-wnd > .layout-box {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -172,7 +177,8 @@ html, body {
     padding: 0;
 }
 
-#setup-wnd > .layout-box > div {
+#setup-wnd > .layout-box > div,
+#setup-add-sensor-wnd > .layout-box > div {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -183,15 +189,79 @@ html, body {
 #setup-sensors {
     width: calc(100% - 15.5em);
     background-color: #220036;
+    overflow-y: auto;
+    height: 100%;
 }
 
 #setup-toolbar {
     width: 14em;
 }
 
-#setup-wnd > .layout-box > div > button {
+#setup-wnd > .layout-box > div > button,
+#setup-add-sensor-wnd > .layout-box > div > button {
     width: 100%;
 }
+
+#setup-add-sensor-wnd {
+    z-index: 2;
+    overflow-y: auto;
+}
+
+/* -- TREE VIEW -- */
+
+/* Remove default bullets */
+ul, #sensor-tree {
+    list-style-type: none;
+}
+
+/* Remove margins and padding from the parent ul */
+#sensor-tree {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the caret/arrow */
+.caret {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.caret::before {
+    content: "\25B6";
+    color: #fff;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+    transform: rotate(90deg);
+}
+
+/* Hide the nested list */
+.nested {
+    display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+    display: block;
+}
+
+/* Big buttons */
+#sensor-tree li {
+    padding: 0.125em;
+}
+
+#sensor-tree div {
+    padding: 1em;
+    background-color: #003d61;
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+}
+
+/* -- RESPONSIVENESS -- */
 
   /* Responsive layout - makes a one column-layout instead of two-column layout */
 @media (max-width: 800px) {

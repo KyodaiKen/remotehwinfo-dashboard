@@ -7,6 +7,7 @@
     <style>
         /* HWiNFO Dashboard for Demion's remotehwinfo by KyoudaiKen */
         
+        /* ----------------------- PANEL LAYOUT ----------------------- */
         body {
             display: block;
             position: absolute;
@@ -61,6 +62,9 @@
             background-color: #00a2ff;
             color: #000;
         }
+        
+        
+        /* ----------------------- SETUP WINDOW ----------------------- */
         
         .button {
             font-family: 'DejaVu Sans Mono', 'Bitsream Vera Sans Mono', 'Hack', monospace;
@@ -157,7 +161,7 @@
             user-select: none;
         }
         
-        #setup-wnd {
+        #setup-wnd, #setup-add-sensor-wnd {
             visibility: hidden;
             display: flex;
             margin: 0;
@@ -170,7 +174,8 @@
             background-color: #081827;
         }
         
-        #setup-wnd > .layout-box {
+        #setup-wnd > .layout-box,
+        #setup-add-sensor-wnd > .layout-box {
             display: flex;
             flex-wrap: wrap;
             flex-direction: row;
@@ -179,7 +184,8 @@
             padding: 0;
         }
         
-        #setup-wnd > .layout-box > div {
+        #setup-wnd > .layout-box > div,
+        #setup-add-sensor-wnd > .layout-box > div {
             display: flex;
             flex-wrap: wrap;
             flex-direction: column;
@@ -190,15 +196,79 @@
         #setup-sensors {
             width: calc(100% - 15.5em);
             background-color: #220036;
+            overflow-y: auto;
+            height: 100%;
         }
         
         #setup-toolbar {
             width: 14em;
         }
         
-        #setup-wnd > .layout-box > div > button {
+        #setup-wnd > .layout-box > div > button,
+        #setup-add-sensor-wnd > .layout-box > div > button {
             width: 100%;
         }
+        
+        #setup-add-sensor-wnd {
+            z-index: 2;
+            overflow-y: auto;
+        }
+        
+        /* -- TREE VIEW -- */
+        
+        /* Remove default bullets */
+        ul, #sensor-tree {
+            list-style-type: none;
+        }
+        
+        /* Remove margins and padding from the parent ul */
+        #sensor-tree {
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Style the caret/arrow */
+        .caret {
+            cursor: pointer;
+            user-select: none; /* Prevent text selection */
+        }
+        
+        /* Create the caret/arrow with a unicode, and style it */
+        .caret::before {
+            content: "\25B6";
+            color: #fff;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        
+        /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+        .caret-down::before {
+            transform: rotate(90deg);
+        }
+        
+        /* Hide the nested list */
+        .nested {
+            display: none;
+        }
+        
+        /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+        .active {
+            display: block;
+        }
+        
+        /* Big buttons */
+        #sensor-tree li {
+            padding: 0.125em;
+        }
+        
+        #sensor-tree div {
+            padding: 1em;
+            background-color: #003d61;
+            cursor: pointer;
+            user-select: none; /* Prevent text selection */
+        }
+        
+        /* -- RESPONSIVENESS -- */
         
           /* Responsive layout - makes a one column-layout instead of two-column layout */
         @media (max-width: 800px) {
@@ -284,6 +354,7 @@
                         statusText: xhr.statusText
                     });
                 };
+                xhr.setRequestHeader("Content-Type", "text/html; charset=UTF-8");
                 xhr.send();
             });
         }
@@ -295,10 +366,44 @@
                 data = data.replaceAll(": inf", ": \"Infinity\"");
                 data = JSON.parse(data);
                 console.log(data);
+        
+                document.getElementById("setup-add-sensor-wnd").style.visibility = "visible";
+        
+                //Create a list of sensors and readings
+                var tree = document.getElementById("sensor-tree");
+                tree.innerHTML = "";
+                for (let si = 0; si < data.hwinfo.sensors.length; si++) {
+                    var dom_li = document.createElement("li");
+                    dom_li.insertAdjacentHTML("beforeend","<div class=\"caret\">"+data.hwinfo.sensors[si].sensorNameUser+"</div>");
+                    var dom_ul_top = document.createElement("ul")
+                    dom_ul_top.classList.toggle("nested");
+                    for (let ri = 0; ri < data.hwinfo.readings.length; ri++) {
+                        if(data.hwinfo.readings[ri].sensorIndex == data.hwinfo.sensors[si].entryIndex) {
+                            var dom_ul_li = document.createElement("li");
+                            dom_ul_li.insertAdjacentHTML("beforeend","<div>"+data.hwinfo.readings[ri].labelUser+" | unit: "+data.hwinfo.readings[ri].unit+"</div>")
+                            dom_ul_top.appendChild(dom_ul_li);
+                        }
+                        dom_li.appendChild(dom_ul_top);
+                    }
+                    tree.appendChild(dom_li);
+                }
+        
+                //Collapse
+                var toggler = document.getElementsByClassName("caret");
+                for (var i = 0; i < toggler.length; i++) {
+                    toggler[i].addEventListener("click", function() {
+                        this.parentElement.querySelector(".nested").classList.toggle("active");
+                        this.classList.toggle("caret-down");
+                    });
+                } 
             })
             .catch(function (err) {
                 console.error('Augh, there was an error!', err.statusText);
             });
+        }
+        
+        var close_add_sensor_btn_click = function() {
+            document.getElementById("setup-add-sensor-wnd").style.visibility = "hidden";
         }
         
         var add_sensor_btn_click = function() {
@@ -336,7 +441,8 @@
             <div id="setup-btn" onclick="open_setup_wnd()">&#9881;</div>
             <div id="setup-wnd">
                 <div class="layout-box">
-                    <div id="setup-sensors"></div>
+                    <div id="setup-sensors">
+                    </div>
                     <div id="setup-toolbar">
                         <button class="button" onclick="add_sensor_btn_click()">Add Sensor</button>
                         <button class="button">Edit Sensor</button>
@@ -347,6 +453,16 @@
                         <button class="button">Save & Close</button>
                         <button class="button">Preview Setup</button>
                         <button class="red-button" onclick="close_setup_wnd()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div id="setup-add-sensor-wnd">
+                <div class="layout-box">
+                    <div id="setup-sensors">
+                        <ul id="sensor-tree"></ul>
+                    </div>
+                    <div id="setup-toolbar">
+                        <button class="red-button" onclick="close_add_sensor_btn_click()">Cancel</button>
                     </div>
                 </div>
             </div>
