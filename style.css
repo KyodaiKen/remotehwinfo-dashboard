@@ -187,7 +187,7 @@ html, body {
 }
 
 #setup-sensors {
-    width: calc(100% - 15.5em);
+    width: calc(100% - 14em);
     background-color: #220036;
     overflow-y: auto;
     height: 100%;

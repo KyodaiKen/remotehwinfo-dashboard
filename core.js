@@ -33,7 +33,7 @@ var remotehwinfo_req = function(method, url) {
 }
 
 //Get sensors for the sensor list when adding a new sensor
-var get_sensors = function() {
+var pick_sensor = function(callback) {
     remotehwinfo_req('GET', 'json.json')
     .then(function (data) {
         data = data.replaceAll(": inf", ": \"Infinity\"");
@@ -51,7 +51,6 @@ var get_sensors = function() {
             dom_li_provider.insertAdjacentHTML("beforeend","<div class=\"caret\">"+provider+"</div>");
             var dom_ul_provider = document.createElement("ul");
             dom_ul_provider.classList.toggle("nested");
-
             for (let si = 0; si < data[provider].sensors.length; si++) {
                 var dom_li = document.createElement("li");
                 dom_li.insertAdjacentHTML("beforeend","<div class=\"caret\">"+data[provider].sensors[si].sensorNameUser+"</div>");
@@ -75,6 +74,7 @@ var get_sensors = function() {
                             label = "<div>"+data[provider].readings[ri].labelUser+" ("+data[provider].readings[ri].value.toLocaleString('en-US')+data[provider].readings[ri].unit+")</div>";
                         }
                         dom_ul_li.setAttribute("kyo-sensor-path", provider+'/'+data[provider].sensors[si].sensorNameOriginal+'/'+data[provider].readings[ri].labelOriginal);
+                        dom_ul_li.setAttribute("class", "sensor");
                         dom_ul_li.insertAdjacentHTML("beforeend",label);
                         dom_ul_top.appendChild(dom_ul_li);
                     }
@@ -86,14 +86,23 @@ var get_sensors = function() {
             }
         }
 
-        //Collapse
+        //Events
         var toggler = document.getElementsByClassName("caret");
         for (var i = 0; i < toggler.length; i++) {
             toggler[i].addEventListener("click", function() {
                 this.parentElement.querySelector(".nested").classList.toggle("active");
                 this.classList.toggle("caret-down");
             });
-        } 
+        }
+
+        var sensors = document.getElementsByClassName("sensor");
+        for (var ii = 0; ii < sensors.length; ii++) {
+            sensors[ii].addEventListener("click", function() {
+                tree.innerHTML = "";
+                document.getElementById("setup-add-sensor-wnd").style.visibility = "hidden";
+                callback(this.getAttribute("kyo-sensor-path"));
+            });
+        }
     })
     .catch(function (err) {
         console.error('Augh, there was an error!', err.statusText);
@@ -101,11 +110,22 @@ var get_sensors = function() {
 }
 
 var close_add_sensor_btn_click = function() {
+    document.getElementById("sensor-tree").innerHTML = "";
     document.getElementById("setup-add-sensor-wnd").style.visibility = "hidden";
 }
 
 var add_sensor_btn_click = function() {
-    get_sensors();
+    pick_sensor(function(sensorpath) {
+        alert(sensorpath);
+    });
+}
+
+var add_calced_btn_click = function() {
+    pick_sensor(function(sensorpath) {
+        pick_sensor(function(sensorpath1) {
+            alert(sensorpath + ", " + sensorpath1);
+        });
+    });
 }
 
 window.addEventListener("DOMContentLoaded", (event) => {
