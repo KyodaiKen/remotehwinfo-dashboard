@@ -189,8 +189,8 @@
             display: flex;
             flex-wrap: wrap;
             flex-direction: column;
-            margin: 0.25em;
-            padding: 0;
+            margin: 0;
+            padding: 0.25em;
         }
         
         #setup-sensors {
@@ -382,34 +382,44 @@
                 //Create a list of sensors and readings
                 var tree = document.getElementById("sensor-tree");
                 tree.innerHTML = "";
-                for (let si = 0; si < data.hwinfo.sensors.length; si++) {
-                    var dom_li = document.createElement("li");
-                    dom_li.insertAdjacentHTML("beforeend","<div class=\"caret\">"+data.hwinfo.sensors[si].sensorNameUser+"</div>");
-                    var dom_ul_top = document.createElement("ul")
-                    dom_ul_top.classList.toggle("nested");
-                    for (let ri = 0; ri < data.hwinfo.readings.length; ri++) {
-                        if(data.hwinfo.readings[ri].sensorIndex == data.hwinfo.sensors[si].entryIndex) {
-                            var dom_ul_li = document.createElement("li");
-                            var label = "";
-                            if(data.hwinfo.readings[ri].unit == "Yes/No") {
-                                var val;
-                                switch (data.hwinfo.readings[ri].value) {
-                                    case 0:
-                                        val = "No";
-                                        break;
-                                    case 1:
-                                        val = "Yes";
+                for (let provider in data) {
+                    var dom_li_provider = document.createElement("li");
+                    dom_li_provider.insertAdjacentHTML("beforeend","<div class=\"caret\">"+provider+"</div>");
+                    var dom_ul_provider = document.createElement("ul");
+                    dom_ul_provider.classList.toggle("nested");
+        
+                    for (let si = 0; si < data[provider].sensors.length; si++) {
+                        var dom_li = document.createElement("li");
+                        dom_li.insertAdjacentHTML("beforeend","<div class=\"caret\">"+data[provider].sensors[si].sensorNameUser+"</div>");
+                        var dom_ul_top = document.createElement("ul")
+                        dom_ul_top.classList.toggle("nested");
+                        for (let ri = 0; ri < data[provider].readings.length; ri++) {
+                            if(data[provider].readings[ri].sensorIndex == data[provider].sensors[si].entryIndex) {
+                                var dom_ul_li = document.createElement("li");
+                                var label = "";
+                                if(data[provider].readings[ri].unit == "Yes/No") {
+                                    var val;
+                                    switch (data[provider].readings[ri].value) {
+                                        case 0:
+                                            val = "No";
+                                            break;
+                                        case 1:
+                                            val = "Yes";
+                                    }
+                                    label = "<div>"+data[provider].readings[ri].labelUser+" ("+val+")</div>";
+                                } else {
+                                    label = "<div>"+data[provider].readings[ri].labelUser+" ("+data[provider].readings[ri].value.toLocaleString('en-US')+data[provider].readings[ri].unit+")</div>";
                                 }
-                                label = "<div>"+data.hwinfo.readings[ri].labelUser+" ("+val+")</div>";
-                            } else {
-                                label = "<div>"+data.hwinfo.readings[ri].labelUser+" ("+data.hwinfo.readings[ri].value.toLocaleString('en-US')+data.hwinfo.readings[ri].unit+")</div>";
+                                dom_ul_li.setAttribute("kyo-sensor-path", provider+'/'+data[provider].sensors[si].sensorNameOriginal+'/'+data[provider].readings[ri].labelOriginal);
+                                dom_ul_li.insertAdjacentHTML("beforeend",label);
+                                dom_ul_top.appendChild(dom_ul_li);
                             }
-                            dom_ul_li.insertAdjacentHTML("beforeend",label);
-                            dom_ul_top.appendChild(dom_ul_li);
+                            dom_li.appendChild(dom_ul_top);
                         }
-                        dom_li.appendChild(dom_ul_top);
+                        dom_ul_provider.appendChild(dom_li);
+                        dom_li_provider.appendChild(dom_ul_provider);
+                        tree.appendChild(dom_li_provider);
                     }
-                    tree.appendChild(dom_li);
                 }
         
                 //Collapse
